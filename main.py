@@ -2,12 +2,10 @@ import random
 
 words: list = ["casa", "torre", "marcos"]
 
-def sort (words:list = [None]) -> list: # yes
+def sort (words:list = [None]) -> list:
     return random.choice(words)
 
 def __a (word:str = None) -> list:
-
-    #word = sort(words)
 
     arr:list  = []
     size:int = len(word) 
@@ -18,11 +16,6 @@ def __a (word:str = None) -> list:
     return arr
 
 def _v(word, letter:str = None):
-
-    #word:str = sort(words)
-
-   #new_w = __a(word)
-
 
     if letter is None:
         return False
@@ -56,21 +49,50 @@ def v_word(letter:str, nao:list = [None]) -> bool:
     
     return False
 
+
+def end(life, word, nao, o):
+
+    a:str = "\n\n --- Parabens você acertou!!! ---- \n\n"
+    b:str = "\n\n --- Você perdeu!!! ---- \n\n"
+
+    if o == 1:
+        print(f"{a} Palavra: {word}\n Vidas restantes: {life}/4\n Letras digitadas: {nao}\n\n") 
+    else:
+        print(f"{b} Palavra: {word}\n Vidas restantes: {life}/4\n Letras digitadas: {nao}\n\n")
+
+
+def v_t(letter: str) -> bool:
+
+    if type(str(letter)):
+        return True
+    
+    return False
+
 def main():
 
     life:int = 4
     word = sort(words)
     new_w = __a(word)
-  
-    # word = sort(words)
-    # new_w = __a(word)
-    # nao:list = []
+    c:int = 1
 
     nao:list = []
 
+    o:int = 0
+
     while life > 0:
 
+        if c == len(word):
+            o += 1
+            end(life, word, nao, o) 
+            break
+
         letter:str = str(input("Enter a letter: "))
+
+        m = v_t(letter)
+
+        if m is False:
+            print("Digite uma letra")
+            continue
 
         validacao = _v(word, letter)
 
@@ -82,10 +104,7 @@ def main():
         nao.append(letter)
 
         if validacao is True:
-
-            #add(letter, word, new_w, nao, life)
-            #b:bool = v_word(letter, nao)
-            #nao.append(letter)
+            c += 1
 
             size:int = len(new_w) 
 
@@ -96,26 +115,13 @@ def main():
             
         if validacao is False:
             life -= 1
-            #nao.append(letter)
-
 
         __print( letter,new_w, life, nao)
     
-    print( " Fim de Jgo! \n")
 
-# def add(word, letter,new_w, nao, life):
+    if life == 0:
+        end(life, word, nao, o)
 
-#     lifee = life
+    print( " -- Fim de Jgo! -- \n")
 
-
-#     for i in range(len(word)):
-#         if letter == word[i]:
-#             new_w[i] = letter
-#             nao.append(letter)
-            
-
-#     __print(letter, new_w, lifee, nao)
-
-    
 main()
-
