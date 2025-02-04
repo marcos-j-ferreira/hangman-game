@@ -1,21 +1,20 @@
 import random 
 
-words: list = ["casa", "torre", "marcos"]
+word_list: list = ["red", "blue", "green", "yellow", "purple", "orange", "pink", "black", "white", "brown"]
 
-def sort (words:list = [None]) -> list:
+def choose_word(words: list = [None]) -> list:
     return random.choice(words)
 
-def __a (word:str = None) -> list:
+def initialize_word(word: str = None) -> list:
+    hidden_word: list = []
+    word_length: int = len(word) 
 
-    arr:list  = []
-    size:int = len(word) 
+    for i in range(word_length):
+        hidden_word.append("_")
 
-    for i in range(size):
-        arr.append("_")
+    return hidden_word
 
-    return arr
-
-def _v(word, letter:str = None):
+def validate_letter_in_word(word, letter: str = None):
 
     if letter is None:
         return False
@@ -32,103 +31,92 @@ def _v(word, letter:str = None):
         
     return False
 
+def display_game_status(letter, hidden_word, lives, guessed_letters):
 
-def __print(letter, new_w, life, nao):
+    status: str = f"\n\n Lives: {lives}\n Guessed letters: {guessed_letters}\n Entered letter: {letter}\n\n Word: {hidden_word}\n\n"
+    print(" \n------- Hangman Game ------- \n")
+    print(status)
 
-    ope:str = f"\n\n Vidas: {life}\n letras digitadas: {nao}\n letra digitada: {letter}\n\n Palavra: {new_w}\n\n"
-    print(" \n------- Jogo da forca ------- \n")
-    print(ope)
+def letter_already_guessed(letter: str, guessed_letters: list = [None]) -> bool:
 
-def v_word(letter:str, nao:list = [None]) -> bool:
-
-    size:int = len(nao)
-
-    for i in range(size):
-        if letter == nao[i]:
+    for guessed_letter in guessed_letters:
+        if letter == guessed_letter:
             return True
     
     return False
 
+def end_game(lives, word, guessed_letters, win, total_lives) -> None:
 
-def end(life, word, nao, o, t_vidas) -> None:
+    win_message: str = "\n\n --- Congratulations you won!!! ---- \n\n"
+    lose_message: str = "\n\n --- You lost!!! ---- \n\n"
 
-    a:str = "\n\n --- Parabens você acertou!!! ---- \n\n"
-    b:str = "\n\n --- Você perdeu!!! ---- \n\n"
-
-    if o == 1:
-        print(f"{a} Palavra: {word}\n Vidas restantes: {life}/{t_vidas}\n Letras digitadas: {nao}\n\n") 
+    if win == 1:
+        print(f"{win_message} Word: {word}\n Remaining lives: {lives}/{total_lives}\n Guessed letters: {guessed_letters}\n\n") 
     else:
-        print(f"{b} Palavra: {word}\n Vidas restantes: {life}/{t_vidas}\n Letras digitadas: {nao}\n\n")
+        print(f"{lose_message} Word: {word}\n Remaining lives: {lives}/{total_lives}\n Guessed letters: {guessed_letters}\n\n")
 
-
-def v_t(letter: str) -> bool:
+def is_valid_letter(letter: str) -> bool:
 
     if letter.isalpha():
         return True
     return False
 
-
-def vidas(word:str) :
+def calculate_lives(word: str):
 
     return len(word) // 2
 
 def main():
 
-    word = sort(words)
+    word = choose_word(word_list)
 
+    lives: int = calculate_lives(word)
+    total_lives = lives
+    hidden_word = initialize_word(word)
+    correct_guesses: int = 0
 
-    life:int = vidas(word)
-    t_vidas = life
-    new_w = __a(word)
-    c:int = 1
+    guessed_letters: list = []
 
-    nao:list = []
+    win: int = 0
 
-    o:int = 0
+    while lives > 0:
 
-    while life > 0:
-
-        if c == len(word):
-            o += 1
-            end(life, word, nao, o, t_vidas) 
+        if correct_guesses == len(word):
+            win += 1
+            end_game(lives, word, guessed_letters, win, total_lives) 
             break
 
-        letter:str = str(input("Enter a letter: "))
+        letter: str = str(input("Enter a letter: "))
 
-        m = v_t(letter)
+        is_valid = is_valid_letter(letter)
 
-        if m is False:
-            print("Digite uma letra")
+        if not is_valid:
+            print("Enter a letter")
             continue
 
-        validacao = _v(word, letter)
+        is_in_word = validate_letter_in_word(word, letter)
 
-        b:bool = v_word(letter, nao)
+        already_guessed = letter_already_guessed(letter, guessed_letters)
 
-        if b is True:
-            print("Letra já digitada")
+        if already_guessed:
+            print("Letter already guessed")
             continue
-        nao.append(letter)
+        guessed_letters.append(letter)
 
-        if validacao is True:
-            c += 1
+        if is_in_word:
+            correct_guesses += 1
 
-            size:int = len(new_w) 
-
-            for i in range(size):
-                
-                if  word[i] == letter:
-                    new_w[i] = letter
+            for i in range(len(hidden_word)):
+                if word[i] == letter:
+                    hidden_word[i] = letter
             
-        if validacao is False:
-            life -= 1
+        if not is_in_word:
+            lives -= 1
 
-        __print( letter,new_w, life, nao)
+        display_game_status(letter, hidden_word, lives, guessed_letters)
     
+    if lives == 0:
+        end_game(lives, word, guessed_letters, win, total_lives)
 
-    if life == 0:
-        end(life, word, nao, o, t_vidas)
-
-    print( " -- Fim de Jgo! -- \n")
+    print(" -- Game Over! -- \n")
 
 main()
