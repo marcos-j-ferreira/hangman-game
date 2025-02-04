@@ -50,15 +50,15 @@ def v_word(letter:str, nao:list = [None]) -> bool:
     return False
 
 
-def end(life, word, nao, o):
+def end(life, word, nao, o, t_vidas) -> None:
 
     a:str = "\n\n --- Parabens você acertou!!! ---- \n\n"
     b:str = "\n\n --- Você perdeu!!! ---- \n\n"
 
     if o == 1:
-        print(f"{a} Palavra: {word}\n Vidas restantes: {life}/4\n Letras digitadas: {nao}\n\n") 
+        print(f"{a} Palavra: {word}\n Vidas restantes: {life}/{t_vidas}\n Letras digitadas: {nao}\n\n") 
     else:
-        print(f"{b} Palavra: {word}\n Vidas restantes: {life}/4\n Letras digitadas: {nao}\n\n")
+        print(f"{b} Palavra: {word}\n Vidas restantes: {life}/{t_vidas}\n Letras digitadas: {nao}\n\n")
 
 
 def v_t(letter: str) -> bool:
@@ -67,10 +67,18 @@ def v_t(letter: str) -> bool:
         return True
     return False
 
+
+def vidas(word:str) :
+
+    return len(word) // 2
+
 def main():
 
-    life:int = 4
     word = sort(words)
+
+
+    life:int = vidas(word)
+    t_vidas = life
     new_w = __a(word)
     c:int = 1
 
@@ -82,7 +90,7 @@ def main():
 
         if c == len(word):
             o += 1
-            end(life, word, nao, o) 
+            end(life, word, nao, o, t_vidas) 
             break
 
         letter:str = str(input("Enter a letter: "))
@@ -119,7 +127,7 @@ def main():
     
 
     if life == 0:
-        end(life, word, nao, o)
+        end(life, word, nao, o, t_vidas)
 
     print( " -- Fim de Jgo! -- \n")
 
