@@ -63,9 +63,8 @@ def end(life, word, nao, o):
 
 def v_t(letter: str) -> bool:
 
-    if type(str(letter)):
+    if letter.isalpha():
         return True
-    
     return False
 
 def main():
