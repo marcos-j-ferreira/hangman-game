@@ -1,6 +1,7 @@
 import random 
+import os
 
-word_list: list = ["red", "blue", "green", "yellow", "purple", "orange", "pink", "black", "white", "brown"]
+word_list: list = ["ping", "bear", "viror_frango", "frango", "frango", "frango", "frango"]
 
 def choose_word(words: list = [None]) -> list:
     return random.choice(words)
@@ -61,9 +62,15 @@ def is_valid_letter(letter: str) -> bool:
         return True
     return False
 
+def clear_ter():
+    os.system('cls')
+
+
 def calculate_lives(word: str):
 
-    return len(word) // 2
+   # return len(word) // 2
+
+   return 5
 
 def main():
 
@@ -97,6 +104,7 @@ def main():
 
         already_guessed = letter_already_guessed(letter, guessed_letters)
 
+        clear_ter()
         if already_guessed:
             print("Letter already guessed")
             continue
@@ -111,6 +119,7 @@ def main():
             
         if not is_in_word:
             lives -= 1
+
 
         display_game_status(letter, hidden_word, lives, guessed_letters)
     
